@@ -1,0 +1,9 @@
+version: '2'
+sql:
+  - engine: 'sqlite'
+    queries: ['src/db/query/historical_prices.sql', 'src/db/query/profile.sql']
+    schema: ['src/db/schema/historical_prices.sql', 'src/db/schema/profile.sql']
+    gen:
+      go:
+        package: 'main'
+        out: 'src/db/sqlc'
