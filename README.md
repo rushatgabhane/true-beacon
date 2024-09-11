@@ -1,1 +1,2 @@
-# true-beacon
+# True Beacon Full Stack assignment
+
