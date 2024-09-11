@@ -1,6 +1,0 @@
-CREATE TABLE historical_prices (
-  id   INTEGER PRIMARY KEY AUTOINCREMENT,
-  date INTEGER NOT NULL,
-  price INTEGER NOT NULL,
-  instrument TEXT NOT NULL
-);

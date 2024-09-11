@@ -1,6 +1,10 @@
 package main
 
 import (
+	"context"
+	"database/sql"
+	_ "embed"
+	"log"
 	"net/http"
 	"true-beacon/src/handlers"
 
@@ -8,27 +12,37 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func main() {
-	r := chi.NewRouter()
-    r.Use(middleware.Logger)
+//go:embed src/db/schema.sql
+var ddl string
 
-	HistoricalPrices := handlers.HistoricalPrices{
-		ID: 0,
+func main() {
+    db, err := sql.Open("sqlite3", "true_beacon.db")
+    if err != nil {
+        log.Fatal("error opening database", err)
+        return
 	}
+    
+    ctx := context.Background()
+    if _, err := db.ExecContext(ctx, ddl); err != nil {
+        log.Fatal("error creating tables", err)
+        return
+    }
+
+    r := chi.NewRouter()
+    r.Use(middleware.Logger)
 
 	// Public Routes
     r.Group(func(r chi.Router) {
-        r.Get("/", HistoricalPrices.HelloWorld)
-        // r.Get("/{AssetUrl}", GetAsset)
-        // r.Get("/manage/url/{path}", FetchAssetDetailsByURL)
-        // r.Get("/manage/id/{path}", FetchAssetDetailsByID)
+        r.Get("/", handlers.HelloWorld)
+        r.Post("/user/login", handlers.Login)
+        r.Post("/user/register", handlers.Register)
     })
 
-    // Private Routes
-    // Require Authentication
-    // r.Group(func(r chi.Router) {
-    //     r.Use(AuthMiddleware)
-    //     r.Post("/manage", CreateAsset)
-    // })
+    // Routes that require authentication
+    r.Group(func(r chi.Router) {
+        // r.Use(middleware.BasicAuth())
+        r.Get("/historical-data", handlers.GetHistoricalPrices)
+    })
+
     http.ListenAndServe(":8000", r)
 }
