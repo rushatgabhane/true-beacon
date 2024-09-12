@@ -36,8 +36,9 @@ func main() {
 		// r.Use(middleware.BasicAuth())
 
 		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
-		r.Get("portfolio/holdings", s.HoldingHandler.GetHoldings)
-		r.Get("user/profile", s.ProfileHandler.GetProfile)
+		r.Get("/portfolio/holdings", s.HoldingHandler.GetHoldings)
+		r.Get("/user/profile", s.ProfileHandler.GetProfile)
+		r.Post("/order/place_order", s.OrderHandler.CreateOrder)
 
 	})
 
