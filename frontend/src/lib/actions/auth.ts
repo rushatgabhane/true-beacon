@@ -13,4 +13,19 @@ async function login(username: string, password: string) {
   }
 }
 
-export { login };
+async function register(username: string, password: string, name: string) {
+  try {
+    return await fetch('http://localhost:8000/user/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password, name }),
+      credentials: 'include',
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export { login, register };
