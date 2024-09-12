@@ -37,46 +37,50 @@ export default function HoldingTable() {
   }, []);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Holdings</CardTitle>
-      </CardHeader>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Authorised date</TableHead>
-            <TableHead>Average price</TableHead>
-            <TableHead>Close price</TableHead>
-            <TableHead>Day change</TableHead>
-            <TableHead>Day change %</TableHead>
-            <TableHead>Exchange</TableHead>
-            <TableHead>ISIN</TableHead>
-            <TableHead>Last price</TableHead>
-            <TableHead>PNL</TableHead>
-            <TableHead>Quantity</TableHead>
-            <TableHead>Trading Symbol</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {holdings.map((holding) => (
-            <TableRow key={holding.isin}>
-              <TableCell className="font-medium">
-                {toDateString(new Date(holding.authorised_date))}
-              </TableCell>
-              <TableCell>{holding.average_price.toFixed(2)}</TableCell>
-              <TableCell>{holding.close_price.toFixed(2)}</TableCell>
-              <TableCell>{holding.day_change.toFixed(2)}</TableCell>
-              <TableCell>{holding.day_change_percentage.toFixed(2)}</TableCell>
-              <TableCell>{holding.exchange}</TableCell>
-              <TableCell>{holding.isin}</TableCell>
-              <TableCell>{holding.last_price}</TableCell>
-              <TableCell>{holding.pnl.toFixed(2)}</TableCell>
-              <TableCell>{holding.quantity}</TableCell>
-              <TableCell>{holding.tradingsymbol}</TableCell>
+    holdings.length > 0 && (
+      <Card>
+        <CardHeader>
+          <CardTitle>Holdings</CardTitle>
+        </CardHeader>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Authorised date</TableHead>
+              <TableHead>Average price</TableHead>
+              <TableHead>Close price</TableHead>
+              <TableHead>Day change</TableHead>
+              <TableHead>Day change %</TableHead>
+              <TableHead>Exchange</TableHead>
+              <TableHead>ISIN</TableHead>
+              <TableHead>Last price</TableHead>
+              <TableHead>PNL</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Trading Symbol</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Card>
+          </TableHeader>
+          <TableBody>
+            {holdings.map((holding) => (
+              <TableRow key={holding.isin}>
+                <TableCell className="font-medium">
+                  {toDateString(new Date(holding.authorised_date))}
+                </TableCell>
+                <TableCell>{holding.average_price.toFixed(2)}</TableCell>
+                <TableCell>{holding.close_price.toFixed(2)}</TableCell>
+                <TableCell>{holding.day_change.toFixed(2)}</TableCell>
+                <TableCell>
+                  {holding.day_change_percentage.toFixed(2)}
+                </TableCell>
+                <TableCell>{holding.exchange}</TableCell>
+                <TableCell>{holding.isin}</TableCell>
+                <TableCell>{holding.last_price}</TableCell>
+                <TableCell>{holding.pnl.toFixed(2)}</TableCell>
+                <TableCell>{holding.quantity}</TableCell>
+                <TableCell>{holding.tradingsymbol}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
+    )
   );
 }

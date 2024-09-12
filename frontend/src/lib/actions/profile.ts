@@ -4,9 +4,14 @@ async function getProfile() {
       method: 'GET',
       credentials: 'include',
     });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      return;
+    }
     if (response.status !== 200) {
       return;
     }
+
     return response.json();
   } catch (error) {
     console.error(error);

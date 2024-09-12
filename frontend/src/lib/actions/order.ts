@@ -1,6 +1,6 @@
 async function addOrder(symbol: string, quantity: number, price: number) {
   try {
-    return await fetch('http://localhost:8000/order/place_order', {
+    const response = await fetch('http://localhost:8000/order/place_order', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -12,6 +12,12 @@ async function addOrder(symbol: string, quantity: number, price: number) {
       }),
       credentials: 'include',
     });
+    if (response.status === 401) {
+      window.location.href = '/login';
+      return;
+    }
+
+    return response.json();
   } catch (error) {
     console.error(error);
   }
