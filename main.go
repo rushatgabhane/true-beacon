@@ -37,6 +37,7 @@ func main() {
         r.Get("/", handlers.HelloWorld)
         r.Post("/user/login", handlers.Login)
         r.Post("/user/register", handlers.Register)
+        r.Post("/historical-data", handlers.AddHistoricalPrices)
     })
 
     // Routes that require authentication

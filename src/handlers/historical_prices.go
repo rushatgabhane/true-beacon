@@ -10,3 +10,7 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 
 func GetHistoricalPrices(w http.ResponseWriter, r *http.Request) {
 }
+
+funct AddHistoricalPrices(w http.ResponseWriter, r *http.Request) {
+	
+}
