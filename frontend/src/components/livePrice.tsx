@@ -7,7 +7,7 @@ export default function LivePrice() {
         <CardHeader>
           <div>
             <div className="relative z-30 flex flex-1 flex-col justify-center">
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground mb-1">
                 Price from Websocket
               </span>
               <span className="text-lg font-bold leading-none sm:text-3xl">

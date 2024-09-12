@@ -31,6 +31,7 @@ import { DatePicker } from './datePicker';
 import { useEffect, useState } from 'react';
 import { getHistoricalData } from '@/lib/actions/historicalData';
 import { toDateString } from '@/lib/utils';
+import CardLoadingIndicator from './cardLoadingIndicator';
 
 export type ChartData = {
   date: string;
@@ -88,6 +89,11 @@ export default function PriceChart() {
       setHistoricalData(transformedData);
     });
   }, [fromDate, toDate, instrument]);
+
+  if (!historicalData) {
+    return <CardLoadingIndicator />;
+  }
+
   return (
     <Card>
       <CardHeader>

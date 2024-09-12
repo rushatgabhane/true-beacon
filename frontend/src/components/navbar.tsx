@@ -10,7 +10,7 @@ function Navbar() {
 
   return (
     <div className="flex w-full flex-col justify-between">
-      <header className="sticky top-0 flex h-16 justify-between items-center gap-4 border-b bg-background px-4 ">
+      <header className="sticky top-0 flex h-16 justify-between items-center gap-4 border-b bg-background px-12 ">
         <nav className="flex gap-6">
           <Link
             href="/"
