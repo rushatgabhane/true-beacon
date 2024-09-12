@@ -34,8 +34,10 @@ func main() {
 	// Routes that require authentication
 	r.Group(func(r chi.Router) {
 		// r.Use(middleware.BasicAuth())
+
 		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
 		r.Get("portfolio/holdings", s.HoldingHandler.GetHoldings)
+		r.Get("user/profile", s.ProfileHandler.GetProfile)
 
 	})
 
