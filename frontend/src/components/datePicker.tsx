@@ -31,7 +31,13 @@ export function DatePicker({ setDate, date, label }: DatePickerProps) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? <span>{label} {format(date, 'PPP')}</span> : <span>{label}</span>}
+          {date ? (
+            <span>
+              {label} {format(date, 'PPP')}
+            </span>
+          ) : (
+            <span>{label}</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
@@ -40,6 +46,7 @@ export function DatePicker({ setDate, date, label }: DatePickerProps) {
           selected={date}
           onSelect={(day) => day && setDate(day)}
           initialFocus
+          defaultMonth={date}
         />
       </PopoverContent>
     </Popover>

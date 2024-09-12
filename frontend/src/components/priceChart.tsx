@@ -44,10 +44,7 @@ export default function PriceChart({
   const firstPrice = chartData?.[0]?.price ?? 0;
   const lastPrice = chartData?.[chartData?.length - 1]?.price ?? 0;
   const isTrendingUp = lastPrice >= firstPrice;
-  const trendingPercent = (
-    ((lastPrice - firstPrice) / firstPrice) *
-    100
-  ).toPrecision(3);
+  const trendingPercent = ((lastPrice - firstPrice) / firstPrice) * 100;
 
   return (
     <Card>
@@ -93,15 +90,17 @@ export default function PriceChart({
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending {isTrendingUp ? 'up' : 'down'} by {trendingPercent}% for
-              this period
-              {isTrendingUp ? (
-                <TrendingUp className="h-4 w-4 text-green-500" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-500" />
-              )}
-            </div>
+            {!isNaN(trendingPercent) && (
+              <div className="flex items-center gap-2 font-medium leading-none">
+                Trending {isTrendingUp ? 'up' : 'down'} by {trendingPercent.toFixed(2)}%
+                for this period
+                {isTrendingUp ? (
+                  <TrendingUp className="h-4 w-4 text-green-500" />
+                ) : (
+                  <TrendingDown className="h-4 w-4 text-red-500" />
+                )}
+              </div>
+            )}
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               {fromDate} to {toDate}
             </div>

@@ -43,7 +43,7 @@ export default function Dashboard() {
 
       setHistoricalData(transformedData);
     });
-  }, []);
+  }, [fromDate, toDate, instrument]);
 
   if (!historicalData) {
     return <FullPageLoadingIndicator />;
