@@ -24,7 +24,12 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Use(cors.Default().Handler)
+	r.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	}).Handler)
 
 	// Public Routes
 	r.Group(func(r chi.Router) {
