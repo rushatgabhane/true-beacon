@@ -1,10 +1,12 @@
 'use client';
+import { DatePicker } from '@/components/datePicker';
 import FullPageLoadingIndicator from '@/components/fullPageLoadingIndicator';
 import LivePrice from '@/components/livePrice';
 import Navbar from '@/components/navbar';
 import PriceChart, { ChartData } from '@/components/priceChart';
 import { ChartConfig } from '@/components/ui/chart';
 import { getHistoricalData } from '@/lib/actions/historicalData';
+import { toDateString } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 type HistoricalData = {
@@ -22,11 +24,17 @@ const chartConfig = {
 export default function Dashboard() {
   const [historicalData, setHistoricalData] = useState<ChartData>();
   const [instrument, setInstrument] = useState<string>('NIFTY 50');
-  const [fromDate, setFromDate] = useState<string>('2021-01-01');
-  const [toDate, setToDate] = useState<string>('2021-12-31');
+  const [fromDate, setFromDate] = useState<Date>(new Date('2017-01-01'));
+  const [toDate, setToDate] = useState<Date>(new Date());
+
+  console.log('[fromDate]: ', fromDate.toLocaleDateString());
 
   useEffect(() => {
-    getHistoricalData('NIFTY 50', '2021-01-01', '2021-12-31').then((res) => {
+    getHistoricalData(
+      instrument,
+      toDateString(fromDate),
+      toDateString(toDate)
+    ).then((res) => {
       const transformedData: ChartData = res.map((data: HistoricalData) => {
         const date = new Date(data.date).toLocaleDateString();
         const price = data.price / 100; // convert from paisa to rupees
@@ -46,10 +54,12 @@ export default function Dashboard() {
       <Navbar />
       <div className="mt-2 mx-12">
         <LivePrice />
+        <DatePicker date={fromDate} setDate={setFromDate} label="From" />
+        <DatePicker date={toDate} setDate={setToDate} label="To" />
         <PriceChart
           instrument={instrument}
-          fromDate={fromDate}
-          toDate={toDate}
+          fromDate={toDateString(fromDate)}
+          toDate={toDateString(toDate)}
           chartData={historicalData}
           chartConfig={chartConfig}
         />
