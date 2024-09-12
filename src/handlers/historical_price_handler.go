@@ -46,6 +46,10 @@ func (h *HistoricalPricesHandler) GetHistoricalPrices(w http.ResponseWriter, r *
 		return
 	}
 
+	if res == nil {
+		res = []db.GetHistoricalPriceBySymbolAndDateRow{}
+	}
+
 	jsonRes, err := json.Marshal(res)
 	if err != nil {
 		log.Println("failed to marshal response: ", err)
