@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 	db "true-beacon/src/db/sqlc"
 )
 
@@ -33,6 +34,7 @@ func (h *HistoricalPricesHandler) GetHistoricalPrices(w http.ResponseWriter, r *
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonRes)
 }
 
@@ -44,26 +46,33 @@ func (h *HistoricalPricesHandler) AddHistoricalPrices(w http.ResponseWriter, r *
 		return
 	}
 
-	for _, data := range prices {
-		// parsedDate, _ := time.Parse("2006-01-02 15:04:05-07:00", data[1])
+	for i, data := range prices {
+		if i == 0 { // skip header
+			continue
+		}
 
 		var f float64
 		fmt.Sscanf(data[2], "%f", &f)
-		price := int64(f*100 + 0.5)
+		priceInPaise := int64(f*100 + 0.5)
 
-		fmt.Println(price)
+		parsedDate, err := time.Parse("2006-01-02 15:04:05-07:00", data[1])
+		if err != nil {
+			log.Println("failed to parse date: ", err)
+			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
+			return
+		}
 
-		// if err != nil {
-		// 	log.Println("failed to convert price to integer: ", price, err)
-		// 	http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
-		// 	return
-		// }
-
-		// h.Queries.AddHistoricalPrice(r.Context(), db.AddHistoricalPriceParams{
-		// 	Date:       parsedDate,
-		// 	Price:      int64(price * 100), // converting to paise
-		// 	Instrument: data[3],
-		// })
+		res, err := h.Queries.AddHistoricalPrice(r.Context(), db.AddHistoricalPriceParams{
+			Date:       parsedDate,
+			Price:      priceInPaise,
+			Instrument: data[3],
+		})
+		if err != nil {
+			log.Println("failed to add historical price: ", err)
+			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
+			return
+		}
+		fmt.Println(res)
 	}
 
 }

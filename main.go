@@ -9,25 +9,27 @@ import (
 )
 
 func main() {
-    dbSourceName := os.Getenv("DB_SOURCE_NAME")
-    
-    s := &Server{DbSourceName: dbSourceName}
-    r := chi.NewRouter()
-    r.Use(middleware.Logger)
+	dbSourceName := os.Getenv("DB_SOURCE_NAME")
+
+	server := &Server{DbSourceName: dbSourceName}
+	s := server.Init()
+
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 
 	// Public Routes
-    r.Group(func(r chi.Router) {
-        r.Get("/", s.HistoricalPricesHandler.HelloWorld)
-        r.Post("/user/login", s.UserHandler.Login)
-        r.Post("/user/register", s.UserHandler.Register)
-        r.Post("/historical-data", s.HistoricalPricesHandler.AddHistoricalPrices)
-    })
+	r.Group(func(r chi.Router) {
+		r.Get("/", s.HistoricalPricesHandler.HelloWorld)
+		r.Post("/user/login", s.UserHandler.Login)
+		r.Post("/user/register", s.UserHandler.Register)
+		r.Post("/historical-data", s.HistoricalPricesHandler.AddHistoricalPrices)
+	})
 
-    // Routes that require authentication
-    r.Group(func(r chi.Router) {
-        // r.Use(middleware.BasicAuth())
-        r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
-    })
+	// Routes that require authentication
+	r.Group(func(r chi.Router) {
+		// r.Use(middleware.BasicAuth())
+		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
+	})
 
-    http.ListenAndServe(":8000", r)
+	http.ListenAndServe(":8000", r)
 }
