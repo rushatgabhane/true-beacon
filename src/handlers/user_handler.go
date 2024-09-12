@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -16,7 +17,28 @@ type UserHandler struct {
 }
 
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+	user := &db.User{}
+	err := json.NewDecoder(r.Body).Decode(user)
+	if err != nil || user.Username == "" || user.Password == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
+	storedPassword, err := h.Queries.GetPasswordByUsername(r.Context(), user.Username)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		log.Println("error reading password: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(user.Password)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
