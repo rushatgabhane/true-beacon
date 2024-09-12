@@ -26,7 +26,6 @@ func main() {
 
 	// Public Routes
 	r.Group(func(r chi.Router) {
-		r.Get("/", s.HistoricalPricesHandler.HelloWorld)
 		r.Post("/user/login", s.UserHandler.Login)
 		r.Post("/user/register", s.UserHandler.Register)
 		r.Post("/historical-data", s.HistoricalPricesHandler.AddHistoricalPrices)
@@ -36,6 +35,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		// r.Use(middleware.BasicAuth())
 		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
+
 	})
 
 	http.ListenAndServe(":8000", r)

@@ -15,11 +15,6 @@ type HistoricalPricesHandler struct {
 	Queries *db.Queries
 }
 
-func (h *HistoricalPricesHandler) HelloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello world!"))
-	// res, err := h.Queries.GetAllUsers(r.Context())
-}
-
 func (h *HistoricalPricesHandler) GetHistoricalPrices(w http.ResponseWriter, r *http.Request) {
 	res, err := h.Queries.GetAllHistoricalPrices(r.Context())
 	if err != nil {
@@ -62,7 +57,7 @@ func (h *HistoricalPricesHandler) AddHistoricalPrices(w http.ResponseWriter, r *
 			return
 		}
 
-		res, err := h.Queries.AddHistoricalPrice(r.Context(), db.AddHistoricalPriceParams{
+		_, err = h.Queries.AddHistoricalPrice(r.Context(), db.AddHistoricalPriceParams{
 			Date:       parsedDate,
 			Price:      priceInPaise,
 			Instrument: data[3],
@@ -72,18 +67,8 @@ func (h *HistoricalPricesHandler) AddHistoricalPrices(w http.ResponseWriter, r *
 			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
 			return
 		}
-
-		jsonRes, err := json.Marshal(res)
-		if err != nil {
-			log.Println("failed to marshal response: ", err)
-			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(jsonRes)
 	}
-
+	w.WriteHeader(http.StatusCreated)
 }
 
 func readCSVFile() ([][]string, error) {

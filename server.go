@@ -19,6 +19,9 @@ type Server struct {
 
 	HistoricalPricesHandler *handlers.HistoricalPricesHandler
 	UserHandler             *handlers.UserHandler
+	ProfileHandler          *handlers.ProfileHandler
+	OrderHandler            *handlers.OrderHandler
+	HoldingHandler          *handlers.HoldingHandler
 }
 
 func (s *Server) Init() *Server {
