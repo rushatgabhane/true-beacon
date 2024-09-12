@@ -72,7 +72,16 @@ func (h *HistoricalPricesHandler) AddHistoricalPrices(w http.ResponseWriter, r *
 			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
 			return
 		}
-		fmt.Println(res)
+
+		jsonRes, err := json.Marshal(res)
+		if err != nil {
+			log.Println("failed to marshal response: ", err)
+			http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(jsonRes)
 	}
 
 }
