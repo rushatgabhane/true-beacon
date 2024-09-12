@@ -14,7 +14,7 @@ INSERT INTO user (
     name,
     username,
     password
-) VALUES (?, ?, ?) RETURNING id, name, username, password
+) VALUES (?, ?, ?) RETURNING id, username, name, password
 `
 
 type AddUserParams struct {
@@ -28,8 +28,8 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
 		&i.Username,
+		&i.Name,
 		&i.Password,
 	)
 	return i, err

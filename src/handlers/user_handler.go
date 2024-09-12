@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	db "true-beacon/src/db/sqlc"
 
+	"github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -36,7 +38,16 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		Username: user.Username,
 		Password: string(hashedPassword),
 	})
+
 	if err != nil {
+		// Check if the error is a unique constraint violation
+		var sqliteErr sqlite3.Error
+		if errors.As(err, &sqliteErr) && sqliteErr.Code == sqlite3.ErrConstraint {
+			log.Println("user already exists: ", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
 		log.Println("error adding user: ", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return

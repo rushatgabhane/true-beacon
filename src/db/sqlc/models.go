@@ -17,7 +17,7 @@ type HistoricalPrice struct {
 
 type User struct {
 	ID       int64  `json:"id"`
-	Name     string `json:"name"`
 	Username string `json:"username"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
