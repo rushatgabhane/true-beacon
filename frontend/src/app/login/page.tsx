@@ -1,7 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import React from 'react';
@@ -16,6 +22,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { login } from '@/lib/actions/auth';
+import Link from 'next/link';
 
 const formSchema = z.object({
   username: z.string().trim().min(2, {
@@ -58,6 +65,12 @@ function Login() {
       <Card className="w-full max-w-sm mt-32">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
+          <CardDescription>
+            New user? Register{' '}
+            <Link href="/register" className="text-blue-700 underline">
+              here.
+            </Link>
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
