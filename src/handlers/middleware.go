@@ -25,6 +25,11 @@ func (m *Middleware) IsAuthenticated(next http.Handler) http.Handler {
 			return
 		}
 
+		if !expiry.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		if expiry.Time.Before(time.Now()) {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
