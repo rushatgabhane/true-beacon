@@ -11,7 +11,7 @@ export default function LivePrice() {
                 Price from Websocket
               </span>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                1000
+                ₹1000
               </span>
             </div>
           </div>
