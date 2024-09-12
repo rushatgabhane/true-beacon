@@ -20,9 +20,9 @@ VALUES (?, ?, ?) RETURNING id, date, price, instrument
 `
 
 type AddHistoricalPriceParams struct {
-	Date       time.Time
-	Price      int64
-	Instrument string
+	Date       time.Time `json:"date"`
+	Price      int64     `json:"price"`
+	Instrument string    `json:"instrument"`
 }
 
 func (q *Queries) AddHistoricalPrice(ctx context.Context, arg AddHistoricalPriceParams) (HistoricalPrice, error) {
@@ -42,9 +42,9 @@ SELECT date, price, instrument FROM historical_price
 `
 
 type GetAllHistoricalPricesRow struct {
-	Date       time.Time
-	Price      int64
-	Instrument string
+	Date       time.Time `json:"date"`
+	Price      int64     `json:"price"`
+	Instrument string    `json:"instrument"`
 }
 
 func (q *Queries) GetAllHistoricalPrices(ctx context.Context) ([]GetAllHistoricalPricesRow, error) {

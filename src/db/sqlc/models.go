@@ -10,19 +10,19 @@ import (
 )
 
 type HistoricalPrice struct {
-	ID         int64
-	Date       time.Time
-	Price      int64
-	Instrument string
+	ID         int64     `json:"id"`
+	Date       time.Time `json:"date"`
+	Price      int64     `json:"price"`
+	Instrument string    `json:"instrument"`
 }
 
 type User struct {
-	ID       int64
-	UserID   string
-	Username string
-	UserType string
-	Broker   string
-	Email    sql.NullString
-	Name     sql.NullString
-	Password sql.NullString
+	ID       int64          `json:"id"`
+	UserID   string         `json:"user_id"`
+	Username string         `json:"username"`
+	UserType string         `json:"user_type"`
+	Broker   string         `json:"broker"`
+	Email    sql.NullString `json:"email"`
+	Name     sql.NullString `json:"name"`
+	Password sql.NullString `json:"password"`
 }

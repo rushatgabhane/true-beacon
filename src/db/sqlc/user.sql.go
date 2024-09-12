@@ -15,12 +15,12 @@ SELECT user_id, user_type, email, username, broker, name FROM user
 `
 
 type GetAllUsersRow struct {
-	UserID   string
-	UserType string
-	Email    sql.NullString
-	Username string
-	Broker   string
-	Name     sql.NullString
+	UserID   string         `json:"user_id"`
+	UserType string         `json:"user_type"`
+	Email    sql.NullString `json:"email"`
+	Username string         `json:"username"`
+	Broker   string         `json:"broker"`
+	Name     sql.NullString `json:"name"`
 }
 
 func (q *Queries) GetAllUsers(ctx context.Context) ([]GetAllUsersRow, error) {
@@ -58,12 +58,12 @@ SELECT user_id, user_type, email, username, broker, name FROM user WHERE user_id
 `
 
 type GetUserByUserIDRow struct {
-	UserID   string
-	UserType string
-	Email    sql.NullString
-	Username string
-	Broker   string
-	Name     sql.NullString
+	UserID   string         `json:"user_id"`
+	UserType string         `json:"user_type"`
+	Email    sql.NullString `json:"email"`
+	Username string         `json:"username"`
+	Broker   string         `json:"broker"`
+	Name     sql.NullString `json:"name"`
 }
 
 func (q *Queries) GetUserByUserID(ctx context.Context, userID string) (GetUserByUserIDRow, error) {
@@ -85,12 +85,12 @@ SELECT user_id, user_type, email, username, broker, name FROM user WHERE usernam
 `
 
 type GetUserByUsernameRow struct {
-	UserID   string
-	UserType string
-	Email    sql.NullString
-	Username string
-	Broker   string
-	Name     sql.NullString
+	UserID   string         `json:"user_id"`
+	UserType string         `json:"user_type"`
+	Email    sql.NullString `json:"email"`
+	Username string         `json:"username"`
+	Broker   string         `json:"broker"`
+	Name     sql.NullString `json:"name"`
 }
 
 func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
