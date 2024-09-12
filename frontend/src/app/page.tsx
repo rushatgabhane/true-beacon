@@ -1,4 +1,5 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { DatePicker } from '@/components/datePicker';
 import FullPageLoadingIndicator from '@/components/fullPageLoadingIndicator';
 import LivePrice from '@/components/livePrice';
@@ -7,7 +8,13 @@ import PriceChart, { ChartData } from '@/components/priceChart';
 import { ChartConfig } from '@/components/ui/chart';
 import { getHistoricalData } from '@/lib/actions/historicalData';
 import { toDateString } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type HistoricalData = {
   date: string;
@@ -26,8 +33,6 @@ export default function Dashboard() {
   const [instrument, setInstrument] = useState<string>('NIFTY 50');
   const [fromDate, setFromDate] = useState<Date>(new Date('2017-01-01'));
   const [toDate, setToDate] = useState<Date>(new Date());
-
-  console.log('[fromDate]: ', fromDate.toLocaleDateString());
 
   useEffect(() => {
     getHistoricalData(
@@ -54,6 +59,15 @@ export default function Dashboard() {
       <Navbar />
       <div className="mt-2 mx-12">
         <LivePrice />
+        <Select defaultValue="NIFTY 50" onValueChange={(v) => setInstrument(v)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Symbol" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="NIFTY 50">Nifty 50</SelectItem>
+            <SelectItem value="NIFTY BANK">Nifty Bank</SelectItem>
+          </SelectContent>
+        </Select>
         <DatePicker date={fromDate} setDate={setFromDate} label="From" />
         <DatePicker date={toDate} setDate={setToDate} label="To" />
         <PriceChart
