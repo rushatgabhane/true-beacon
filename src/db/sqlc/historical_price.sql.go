@@ -39,7 +39,7 @@ func (q *Queries) AddHistoricalPrice(ctx context.Context, arg AddHistoricalPrice
 
 const getHistoricalPriceBySymbolAndDate = `-- name: GetHistoricalPriceBySymbolAndDate :many
 SELECT date, price, instrument FROM historical_price
-WHERE date BETWEEN ? AND ? AND instrument = ?
+WHERE date BETWEEN ? AND ? AND instrument = ? ORDER BY date ASC
 `
 
 type GetHistoricalPriceBySymbolAndDateParams struct {
