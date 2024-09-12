@@ -30,14 +30,27 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 function Login() {
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
   function onSubmit(data: FormValues) {
-    console.log('[data]: ', data);
-    login(data.username, data.password);
+    setErrorMessage('');
+    login(data.username, data.password).then((response) => {
+      if (response?.status === 401) {
+        setErrorMessage('Invalid username or password.');
+        return;
+      }
+
+      if (response?.status === 200) {
+        window.location.href = '/';
+        return;
+      }
+
+      setErrorMessage('An error occurred. Please try again.');
+    });
   }
 
   return (
@@ -79,6 +92,7 @@ function Login() {
                     </FormItem>
                   )}
                 />
+                {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
                 <Button type="submit">Submit</Button>
               </form>
             </Form>
