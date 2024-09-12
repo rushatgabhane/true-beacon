@@ -61,7 +61,6 @@ export default function Dashboard() {
       <Navbar />
       <div className="mt-2 mx-12">
         <LivePrice />
-        <ProfileDetails />
         <Select defaultValue="NIFTY 50" onValueChange={(v) => setInstrument(v)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Symbol" />

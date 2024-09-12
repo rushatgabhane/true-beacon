@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import ProfileDetails from './profileDetails';
 
 function Navbar() {
   const currentRoute = usePathname();
@@ -8,8 +9,8 @@ function Navbar() {
   console.log('[currentRoute]: ', currentRoute);
 
   return (
-    <div className="flex w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 ">
+    <div className="flex w-full flex-col justify-between">
+      <header className="sticky top-0 flex h-16 justify-between items-center gap-4 border-b bg-background px-4 ">
         <nav className="flex gap-6">
           <Link
             href="/"
@@ -30,6 +31,7 @@ function Navbar() {
             Orders
           </Link>
         </nav>
+        <ProfileDetails />
       </header>
     </div>
   );
