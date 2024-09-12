@@ -26,7 +26,7 @@ type HoldingResponse struct {
 	Data   []Holding `json:"data"`
 }
 
-func GetHoldings(w http.ResponseWriter, r *http.Request) {
+func (h *HoldingHandler) GetHoldings(w http.ResponseWriter, r *http.Request) {
 	holdings := []Holding{
 		{
 			TradingSymbol:       "GOLDBEES",

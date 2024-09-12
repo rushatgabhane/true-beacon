@@ -35,6 +35,7 @@ func main() {
 	r.Group(func(r chi.Router) {
 		// r.Use(middleware.BasicAuth())
 		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
+		r.Get("portfolio/holdings", s.HoldingHandler.GetHoldings)
 
 	})
 
