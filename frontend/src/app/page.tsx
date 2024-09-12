@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import HoldingTable from '@/components/holdingTable';
+import ProfileDetails from '@/components/profileDetails';
 
 type HistoricalData = {
   date: string;
@@ -60,6 +61,7 @@ export default function Dashboard() {
       <Navbar />
       <div className="mt-2 mx-12">
         <LivePrice />
+        <ProfileDetails />
         <Select defaultValue="NIFTY 50" onValueChange={(v) => setInstrument(v)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Symbol" />
@@ -78,7 +80,9 @@ export default function Dashboard() {
           chartData={historicalData}
           chartConfig={chartConfig}
         />
-        <HoldingTable />
+        <div className="my-8">
+          <HoldingTable />
+        </div>
       </div>
     </>
   );
