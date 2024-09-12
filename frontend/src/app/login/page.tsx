@@ -1,19 +1,45 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Label } from '@radix-ui/react-label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-
+import { z } from 'zod';
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { login } from '@/lib/actions/auth';
+
+const formSchema = z.object({
+  username: z.string().trim().min(2, {
+    message: 'Username must be at least 2 characters.',
+  }),
+
+  password: z.string().trim().min(6, {
+    message: 'Password must be at least 6 characters.',
+  }),
+});
+
+type FormValues = z.infer<typeof formSchema>;
+
 function Login() {
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+  });
+
+  function onSubmit(data: FormValues) {
+    console.log('[data]: ', data);
+    login(data.username, data.password);
+  }
+
   return (
     <div className="flex items-center justify-center">
       <Card className="w-full max-w-sm mt-32">
@@ -22,22 +48,42 @@ function Login() {
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Username</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="puppy-saturation"
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <FormField
+                  control={form.control}
+                  name="username"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input placeholder="puppy-saturation" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full">Sign in</Button>
-        </CardFooter>
       </Card>
     </div>
   );
