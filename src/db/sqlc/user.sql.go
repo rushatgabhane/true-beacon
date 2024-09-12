@@ -38,6 +38,17 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 	return i, err
 }
 
+const getExipryBySession = `-- name: GetExipryBySession :one
+SELECT expiry FROM user WHERE session = ?
+`
+
+func (q *Queries) GetExipryBySession(ctx context.Context, session sql.NullString) (sql.NullTime, error) {
+	row := q.db.QueryRowContext(ctx, getExipryBySession, session)
+	var expiry sql.NullTime
+	err := row.Scan(&expiry)
+	return expiry, err
+}
+
 const getPasswordByUsername = `-- name: GetPasswordByUsername :one
 SELECT password FROM user WHERE username = ?
 `

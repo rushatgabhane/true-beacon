@@ -13,3 +13,6 @@ UPDATE user
 SET session = ?, expiry = ? 
 WHERE username = ? 
 RETURNING *;
+
+-- name: GetExipryBySession :one
+SELECT expiry FROM user WHERE session = ?;

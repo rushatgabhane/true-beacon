@@ -28,18 +28,17 @@ func main() {
 	r.Group(func(r chi.Router) {
 		r.Post("/user/login", s.UserHandler.Login)
 		r.Post("/user/register", s.UserHandler.Register)
-		r.Post("/historical-data", s.HistoricalPricesHandler.AddHistoricalPrices)
 	})
 
 	// Routes that require authentication
 	r.Group(func(r chi.Router) {
-		// r.Use(middleware.BasicAuth())
+		r.Use(s.Middleware.IsAuthenticated)
 
 		r.Get("/historical-data", s.HistoricalPricesHandler.GetHistoricalPrices)
+		r.Post("/historical-data", s.HistoricalPricesHandler.AddHistoricalPrices)
 		r.Get("/portfolio/holdings", s.HoldingHandler.GetHoldings)
 		r.Get("/user/profile", s.ProfileHandler.GetProfile)
 		r.Post("/order/place_order", s.OrderHandler.AddOrder)
-
 	})
 
 	http.ListenAndServe(":8000", r)

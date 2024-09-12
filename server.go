@@ -22,6 +22,7 @@ type Server struct {
 	ProfileHandler          *handlers.ProfileHandler
 	OrderHandler            *handlers.OrderHandler
 	HoldingHandler          *handlers.HoldingHandler
+	Middleware              *handlers.Middleware
 }
 
 func (s *Server) Init() *Server {
@@ -39,6 +40,7 @@ func (s *Server) Init() *Server {
 	queries := db.New(database)
 	s.HistoricalPricesHandler = &handlers.HistoricalPricesHandler{Queries: queries}
 	s.UserHandler = &handlers.UserHandler{Queries: queries}
+	s.Middleware = &handlers.Middleware{Queries: queries}
 
 	return s
 }
