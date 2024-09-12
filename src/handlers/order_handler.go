@@ -18,7 +18,7 @@ type OrderResponse struct {
 	Data   Order  `json:"data"`
 }
 
-func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) AddOrder(w http.ResponseWriter, r *http.Request) {
 	o := OrderResponse{
 		Status: "success",
 		Data: Order{
