@@ -9,5 +9,7 @@ CREATE TABLE IF NOT EXISTS user (
   id   INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  session TEXT,
+  expiry DATETIME
 );

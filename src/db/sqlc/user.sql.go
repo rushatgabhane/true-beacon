@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const addUser = `-- name: AddUser :one
@@ -14,7 +15,7 @@ INSERT INTO user (
     name,
     username,
     password
-) VALUES (?, ?, ?) RETURNING id, username, name, password
+) VALUES (?, ?, ?) RETURNING id, username, name, password, session, expiry
 `
 
 type AddUserParams struct {
@@ -31,6 +32,8 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) 
 		&i.Username,
 		&i.Name,
 		&i.Password,
+		&i.Session,
+		&i.Expiry,
 	)
 	return i, err
 }
@@ -44,4 +47,31 @@ func (q *Queries) GetPasswordByUsername(ctx context.Context, username string) (s
 	var password string
 	err := row.Scan(&password)
 	return password, err
+}
+
+const setSessionAndExpiryByUsername = `-- name: SetSessionAndExpiryByUsername :one
+UPDATE user 
+SET session = ?, expiry = ? 
+WHERE username = ? 
+RETURNING id, username, name, password, session, expiry
+`
+
+type SetSessionAndExpiryByUsernameParams struct {
+	Session  sql.NullString `json:"session"`
+	Expiry   sql.NullTime   `json:"expiry"`
+	Username string         `json:"username"`
+}
+
+func (q *Queries) SetSessionAndExpiryByUsername(ctx context.Context, arg SetSessionAndExpiryByUsernameParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, setSessionAndExpiryByUsername, arg.Session, arg.Expiry, arg.Username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Username,
+		&i.Name,
+		&i.Password,
+		&i.Session,
+		&i.Expiry,
+	)
+	return i, err
 }

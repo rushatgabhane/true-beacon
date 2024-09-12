@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -16,8 +17,10 @@ type HistoricalPrice struct {
 }
 
 type User struct {
-	ID       int64  `json:"id"`
-	Username string `json:"username"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	ID       int64          `json:"id"`
+	Username string         `json:"username"`
+	Name     string         `json:"name"`
+	Password string         `json:"password"`
+	Session  sql.NullString `json:"session"`
+	Expiry   sql.NullTime   `json:"expiry"`
 }

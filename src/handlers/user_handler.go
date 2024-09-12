@@ -6,8 +6,10 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"time"
 	db "true-beacon/src/db/sqlc"
 
+	"github.com/google/uuid"
 	"github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -39,6 +41,28 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
+
+	session := uuid.NewString()
+	expiry := time.Now().Add(5 * time.Minute)
+
+	_, err = h.Queries.SetSessionAndExpiryByUsername(r.Context(), db.SetSessionAndExpiryByUsernameParams{
+		Session:  sql.NullString{String: session, Valid: true},
+		Expiry:   sql.NullTime{Time: expiry, Valid: true},
+		Username: user.Username,
+	})
+	if err != nil {
+		log.Println("error setting session and expiry: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session",
+		Value:    session,
+		Expires:  expiry,
+		HttpOnly: true,
+		Path:     "/",
+	})
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
