@@ -37,25 +37,32 @@ func (q *Queries) AddHistoricalPrice(ctx context.Context, arg AddHistoricalPrice
 	return i, err
 }
 
-const getAllHistoricalPrices = `-- name: GetAllHistoricalPrices :many
+const getHistoricalPriceBySymbolAndDate = `-- name: GetHistoricalPriceBySymbolAndDate :many
 SELECT date, price, instrument FROM historical_price
+WHERE date BETWEEN ? AND ? AND instrument = ?
 `
 
-type GetAllHistoricalPricesRow struct {
+type GetHistoricalPriceBySymbolAndDateParams struct {
+	Date       time.Time `json:"date"`
+	Date_2     time.Time `json:"date_2"`
+	Instrument string    `json:"instrument"`
+}
+
+type GetHistoricalPriceBySymbolAndDateRow struct {
 	Date       time.Time `json:"date"`
 	Price      int64     `json:"price"`
 	Instrument string    `json:"instrument"`
 }
 
-func (q *Queries) GetAllHistoricalPrices(ctx context.Context) ([]GetAllHistoricalPricesRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAllHistoricalPrices)
+func (q *Queries) GetHistoricalPriceBySymbolAndDate(ctx context.Context, arg GetHistoricalPriceBySymbolAndDateParams) ([]GetHistoricalPriceBySymbolAndDateRow, error) {
+	rows, err := q.db.QueryContext(ctx, getHistoricalPriceBySymbolAndDate, arg.Date, arg.Date_2, arg.Instrument)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAllHistoricalPricesRow
+	var items []GetHistoricalPriceBySymbolAndDateRow
 	for rows.Next() {
-		var i GetAllHistoricalPricesRow
+		var i GetHistoricalPriceBySymbolAndDateRow
 		if err := rows.Scan(&i.Date, &i.Price, &i.Instrument); err != nil {
 			return nil, err
 		}

@@ -16,7 +16,31 @@ type HistoricalPricesHandler struct {
 }
 
 func (h *HistoricalPricesHandler) GetHistoricalPrices(w http.ResponseWriter, r *http.Request) {
-	res, err := h.Queries.GetAllHistoricalPrices(r.Context())
+	fromDate, err := time.Parse("2006-01-02", r.URL.Query().Get("from_date"))
+	if err != nil {
+		log.Println("failed to parse from date: ", err)
+		http.Error(w, "invalid from_date", http.StatusBadRequest)
+		return
+	}
+
+	toDate, err := time.Parse("2006-01-02", r.URL.Query().Get("to_date"))
+	if err != nil {
+		log.Println("failed to parse to date: ", err)
+		http.Error(w, "invalid to_date", http.StatusBadRequest)
+		return
+	}
+
+	instrument := r.URL.Query().Get("symbol")
+	if instrument == "" {
+		http.Error(w, "symbol is required", http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.Queries.GetHistoricalPriceBySymbolAndDate(r.Context(), db.GetHistoricalPriceBySymbolAndDateParams{
+		Instrument: instrument,
+		Date:       fromDate,
+		Date_2:     toDate,
+	})
 	if err != nil {
 		http.Error(w, "oops! something went wrong", http.StatusInternalServerError)
 		return
