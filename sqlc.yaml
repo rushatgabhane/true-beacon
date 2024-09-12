@@ -1,7 +1,7 @@
 version: '2'
 sql:
   - engine: 'sqlite'
-    queries: ['src/db/query/historical_price.sql']
+    queries: ['src/db/query/historical_price.sql', 'src/db/query/user.sql']
     schema: 'src/db/schema.sql'
     gen:
       go:

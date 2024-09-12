@@ -14,3 +14,10 @@ type HistoricalPrice struct {
 	Price      int64     `json:"price"`
 	Instrument string    `json:"instrument"`
 }
+
+type User struct {
+	ID       int64  `json:"id"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
