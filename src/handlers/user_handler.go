@@ -43,7 +43,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := uuid.NewString()
-	expiry := time.Now().Add(15 * time.Minute)
+	expiry := time.Now().Add(30 * time.Minute)
 
 	_, err = h.Queries.SetSessionAndExpiryByUsername(r.Context(), db.SetSessionAndExpiryByUsernameParams{
 		Session:  sql.NullString{String: session, Valid: true},

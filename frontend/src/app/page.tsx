@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import HoldingTable from '@/components/holdingTable';
 
 type HistoricalData = {
   date: string;
@@ -77,6 +78,7 @@ export default function Dashboard() {
           chartData={historicalData}
           chartConfig={chartConfig}
         />
+        <HoldingTable />
       </div>
     </>
   );
