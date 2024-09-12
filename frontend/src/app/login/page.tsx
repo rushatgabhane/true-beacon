@@ -106,7 +106,7 @@ function Login() {
                   )}
                 />
                 {errorMessage && <FormMessage>{errorMessage}</FormMessage>}
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Login</Button>
               </form>
             </Form>
           </div>

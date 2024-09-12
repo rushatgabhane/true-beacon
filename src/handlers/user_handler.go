@@ -43,7 +43,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session := uuid.NewString()
-	expiry := time.Now().Add(30 * time.Minute)
+	expiry := time.Now().Add(15 * time.Minute)
 
 	_, err = h.Queries.SetSessionAndExpiryByUsername(r.Context(), db.SetSessionAndExpiryByUsernameParams{
 		Session:  sql.NullString{String: session, Valid: true},
@@ -68,7 +68,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	user := &db.User{}
 	err := json.NewDecoder(r.Body).Decode(user)
-	if err != nil || user.Username == "" || user.Password == "" {
+	if err != nil || user.Username == "" || user.Password == "" || user.Name == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -83,6 +83,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	_, err = h.Queries.AddUser(r.Context(), db.AddUserParams{
 		Username: user.Username,
 		Password: string(hashedPassword),
+		Name:     user.Name,
 	})
 
 	if err != nil {
@@ -98,5 +99,27 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	session := uuid.NewString()
+	expiry := time.Now().Add(15 * time.Minute)
+
+	_, err = h.Queries.SetSessionAndExpiryByUsername(r.Context(), db.SetSessionAndExpiryByUsernameParams{
+		Session:  sql.NullString{String: session, Valid: true},
+		Expiry:   sql.NullTime{Time: expiry, Valid: true},
+		Username: user.Username,
+	})
+	if err != nil {
+		log.Println("error setting session and expiry: ", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session",
+		Value:    session,
+		Expires:  expiry,
+		HttpOnly: true,
+		Path:     "/",
+	})
 	w.WriteHeader(http.StatusCreated)
 }
