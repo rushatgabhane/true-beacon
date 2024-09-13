@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -24,22 +25,24 @@ func (h *LivePriceHandler) GetLivePrice(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		log.Println(err)
 	}
+	defer ws.Close()
 
 	log.Println("websocket client connected")
 
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
 		for {
-			newRandomPrice := rand.Intn(5000) + 25000
+			newRandomPrice := rand.Intn(100000) + 250000
 			err = ws.WriteMessage(websocket.TextMessage, []byte(fmt.Sprintf("%d", newRandomPrice)))
 			if err != nil {
 				log.Println(err)
+				wg.Done()
 				break
 			}
-			log.Println("New price sent")
-			time.Sleep(5 * time.Second)
+			time.Sleep(2 * time.Second)
 		}
 	}()
-
-	defer ws.Close()
-
+	wg.Wait()
+	log.Println("websocket client disconnected")
 }

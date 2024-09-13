@@ -1,6 +1,18 @@
+import { useEffect, useState } from 'react';
 import { Card, CardHeader } from './ui/card';
 
 export default function LivePrice() {
+  const [price, setPrice] = useState<string>();
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8000/live-price');
+    socket.addEventListener('message', (event) => {
+      setPrice(event.data);
+    });
+  }, []);
+
+  const priceInRupees = Number(price) / 100;
+
   return (
     <div className="w-48">
       <Card>
@@ -11,7 +23,7 @@ export default function LivePrice() {
                 Price from Websocket
               </span>
               <span className="text-lg font-bold leading-none sm:text-3xl">
-                ₹1000
+                ₹{priceInRupees}
               </span>
             </div>
           </div>
