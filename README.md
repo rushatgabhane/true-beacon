@@ -1,7 +1,7 @@
 # True Beacon Fullstack assignment
 
 ## Features
-- Websocket that pushes dummy live price which is displayed in dashboard.
+- 🥇 Websocket that pushes dummy live price which is displayed in dashboard. 
 - Login, Register
 - Historical data chart that has filters for date and symbol, table with holdings.
 - Place order.
