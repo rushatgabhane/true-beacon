@@ -49,5 +49,6 @@ func main() {
 		r.Get("/live-price", s.LivePriceHandler.GetLivePrice)
 	})
 
+	log.Println("server is running on port 8000")
 	http.ListenAndServe(":8000", r)
 }
