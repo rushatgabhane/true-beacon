@@ -6,8 +6,6 @@ import ProfileDetails from './profileDetails';
 function Navbar() {
   const currentRoute = usePathname();
 
-  console.log('[currentRoute]: ', currentRoute);
-
   return (
     <div className="flex w-full flex-col justify-between">
       <header className="sticky top-0 flex h-16 justify-between items-center gap-4 border-b bg-background px-12 ">
