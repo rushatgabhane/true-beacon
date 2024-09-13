@@ -20,6 +20,7 @@ async function addOrder(symbol: string, quantity: number, price: number) {
     return response.json();
   } catch (error) {
     console.error(error);
+    window.location.href = '/login';
   }
 }
 

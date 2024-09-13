@@ -27,6 +27,7 @@ async function getHistoricalData(
     return response.json();
   } catch (error) {
     console.error(error);
+    window.location.href = '/login';
   }
 }
 
