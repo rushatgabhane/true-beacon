@@ -23,6 +23,7 @@ type Server struct {
 	OrderHandler            *handlers.OrderHandler
 	HoldingHandler          *handlers.HoldingHandler
 	Middleware              *handlers.Middleware
+	LivePriceHandler        *handlers.LivePriceHandler
 }
 
 func (s *Server) Init() *Server {

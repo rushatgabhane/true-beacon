@@ -46,6 +46,7 @@ func main() {
 		r.Get("/portfolio/holdings", s.HoldingHandler.GetHoldings)
 		r.Get("/user/profile", s.ProfileHandler.GetProfile)
 		r.Post("/order/place_order", s.OrderHandler.AddOrder)
+		r.Get("live-price", s.LivePriceHandler.GetLivePrice)
 	})
 
 	http.ListenAndServe(":8000", r)
