@@ -3,7 +3,7 @@
 ## Features
 - 🥇 Websocket that pushes dummy live price which is displayed in dashboard. 
 - Login, Register
-- Historical data chart that has filters for date and symbol, table with holdings.
+- Historical data chart that has filters for date and symbol, table with holdings and total PNL.
 - Place order.
 - User details from nav bar.
 - Persistent sessions and redirect to login if a session expires.
