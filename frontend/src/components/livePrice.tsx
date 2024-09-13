@@ -14,7 +14,8 @@ export default function LivePrice() {
   const priceInRupees = Number(price) / 100;
 
   return (
-    price && (
+    price &&
+    !isNaN(priceInRupees) && (
       <div className="w-48">
         <Card>
           <CardHeader>
